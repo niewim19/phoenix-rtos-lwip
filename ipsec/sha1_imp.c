@@ -15,8 +15,9 @@
  * %LICENSE%
  */
 
-#include <hal/if.h>
-#include <main/if.h>
+#include "sha1_imp.h"
+
+#include <string.h>
 
 
 #define rol(x, n) (((x) << (n)) | ((x) >> (32 - (n))))
@@ -44,7 +45,7 @@
 #ifdef _BIGENDIAN
 #define X(a) \
 	do { \
-		*(u32 *)p = hd->h##a; \
+		*(uint32_t *)p = hd->h##a; \
 		p += 4; \
 	} while (0)
 #else
@@ -73,12 +74,12 @@ void sha1_init(void *context)
 
 
 /* Transform the message X which consists of 16 32-bit-words */
-void sha1_transform(sha1_context_t *hd, u8 *data)
+void sha1_transform(sha1_context_t *hd, uint8_t *data)
 {
-	register u32 a, b, c, d, e, tm;
-	u32 x[16];
+	register uint32_t a, b, c, d, e, tm;
+	uint32_t x[16];
 	int i;
-	u8 *p2;
+	uint8_t *p2;
 
 	/* Get values from the chaining vars. */
 	a = hd->h0;
@@ -87,7 +88,7 @@ void sha1_transform(sha1_context_t *hd, u8 *data)
 	d = hd->h3;
 	e = hd->h4;
 
-	for (i = 0, p2 = (u8 *)x; i < 16; i++, p2 += 4) {
+	for (i = 0, p2 = (uint8_t *)x; i < 16; i++, p2 += 4) {
 		p2[3] = *data++;
 		p2[2] = *data++;
 		p2[1] = *data++;
@@ -185,7 +186,7 @@ void sha1_transform(sha1_context_t *hd, u8 *data)
 
 
 /* Update the message digest with the contents of INBUF with length INLEN */
-void sha1_write(void *context, u8 *inbuf, size_t inlen)
+void sha1_write(void *context, uint8_t *inbuf, size_t inlen)
 {
 	sha1_context_t *hd = (sha1_context_t *)context;
 
@@ -229,8 +230,8 @@ void sha1_write(void *context, u8 *inbuf, size_t inlen)
 void sha1_final(void *context)
 {
 	sha1_context_t *hd = (sha1_context_t *)context;
-	u32 t, msb, lsb;
-	u8 *p;
+	uint32_t t, msb, lsb;
+	uint8_t *p;
 
 	sha1_write(hd, NULL, 0);
 
@@ -264,7 +265,7 @@ void sha1_final(void *context)
 			hd->buf[hd->count++] = 0;
 		sha1_write(hd, NULL, 0); /* flush */
 		;
-		hal_memset(hd->buf, 0, 56); /* fill next block with zeroes */
+		memset(hd->buf, 0, 56); /* fill next block with zeroes */
 	}
 
 	/* append the 64 bit count */
@@ -298,8 +299,8 @@ void sha1_hash(char *outbuf, const char *buffer, size_t length)
 	static sha1_context_t hd;
 
 	sha1_init(&hd);
-	sha1_write(&hd, (u8 *)buffer, length);
+	sha1_write(&hd, (uint8_t *)buffer, length);
 	sha1_final(&hd);
 
-	hal_memcpy(outbuf, hd.buf, 20);
+	memcpy(outbuf, hd.buf, 20);
 }

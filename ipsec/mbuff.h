@@ -7,10 +7,11 @@
  * %LICENSE%
  */
 
-#ifndef MBUFF_H
-#define MBUFF_H
+#ifndef _MBUFF_H_
+#define _MBUFF_H_
 
-#include <phoenix/types.h>
+#include <stddef.h>
+
 
 typedef struct _mbuff_t {
 	struct _mbuff_t *next;

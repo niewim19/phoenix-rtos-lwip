@@ -1,5 +1,7 @@
-#include <stddef.h>
 #include "aes.h"
+
+#include "ipsec.h"
+
 
 static const unsigned int Te0[256];
 static const unsigned int Te1[256];
@@ -479,8 +481,8 @@ int AES_decrypt(AES_ctx_t *ctx, unsigned char *cipher, unsigned char *plain, siz
 	return len;
 }
 
-void ipsec_cipher_aes(u8 *text, const size_t text_len, const u8 *key, const size_t key_len,
-	const u8 *iv, const int mode, u8 *output)
+void ipsec_cipher_aes(uint8_t *text, const size_t text_len, const uint8_t *key, const size_t key_len,
+	const uint8_t *iv, const int mode, uint8_t *output)
 {
 	void (*aes)(AES_ctx_t *, const unsigned char[], unsigned char[]);
 	AES_ctx_t ctx;

@@ -35,6 +35,10 @@ include $(static-lib.mk)
 # should define NET_DRIVERS and platform driver sources
 -include _targets/Makefile.$(TARGET_FAMILY)-$(TARGET_SUBFAMILY)
 
+ifeq (${LWIP_IPSEC_BUILD},yes)
+include ipsec/Makefile
+endif
+
 include drivers/Makefile
 include port/Makefile
 

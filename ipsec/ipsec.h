@@ -42,7 +42,10 @@
 #ifndef __IPSEC_H__
 #define __IPSEC_H__
 
-#include <lwip/ip4_addr.h>
+#include <phoenix/ipsec.h>
+
+#include "lwip/ip_addr.h"
+
 
 #define IPSEC_HLEN (PBUF_IP_HLEN + 28 + PBUF_TRANSPORT_HLEN) /**< Add room for an other IP header and AH(28 bytes with HMAC-xxx-96)/ESP(8 bytes) data */
 
